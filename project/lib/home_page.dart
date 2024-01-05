@@ -9,11 +9,14 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final PageController _pageController = PageController();
+  int _selectedIndex = 0;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text("Main"),
+          title: const Text("HomePage"),
           centerTitle: true,
         ),
         body: Container());

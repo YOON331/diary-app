@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:project/find_id_page.dart';
 import 'package:project/find_pw_page.dart';
-import 'package:project/home_page.dart';
+import 'package:project/main_page.dart';
 import 'package:project/register_page.dart';
 
 class LoginListPage extends StatefulWidget {
@@ -92,7 +92,7 @@ class _LoginPageState extends State<LoginListPage> {
 
             // 메인 화면 이동
             Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-              return const HomePage();
+              return const MainPage();
             }));
           },
           child: const Text("Login"),
