@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:project/config/mySqlConnector.dart';
 import 'package:project/login_page.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
   runApp(const MyApp());
+
+  dbConnector();
 }
 
 class MyApp extends StatelessWidget {

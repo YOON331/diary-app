@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:project/diary_page.dart';
 import 'package:project/event.dart';
 import 'package:table_calendar/table_calendar.dart';
 
@@ -69,9 +70,7 @@ class _CalendarEx2State extends State<CalendarEx2> {
             const SizedBox(
               height: 20,
             ),
-            SizedBox(
-              width: 350,
-              height: 250,
+            Expanded(
               child: ValueListenableBuilder<List<Event>>(
                   valueListenable: _selectedEvents,
                   builder: (context, value, _) {
@@ -109,31 +108,37 @@ class _CalendarEx2State extends State<CalendarEx2> {
   Widget btn() {
     return FloatingActionButton(
       onPressed: () {
-        showDialog(
-            context: context,
-            builder: (context) {
-              return AlertDialog(
-                scrollable: true,
-                title: const Text("Diary Title"),
-                content: Padding(
-                  padding: EdgeInsets.all(8),
-                  child: TextField(
-                    controller: _eventController,
-                  ),
-                ),
-                actions: [
-                  ElevatedButton(
-                      onPressed: () {
-                        events.addAll({
-                          _selectedDay!: [Event(_eventController.text)]
-                        });
-                        Navigator.of(context).pop();
-                        _selectedEvents.value = _getEventsForDay(_selectedDay!);
-                      },
-                      child: const Text("Submit"))
-                ],
-              );
-            });
+        // move to diarypage
+        Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+          return const DiaryPage();
+        }));
+        // showDialog - can write title
+        // showDialog(
+        //     context: context,
+        //     builder: (context) {
+        //       return AlertDialog(
+        //         scrollable: true,
+        //         title: const Text("Diary Title"),
+        //         content: Padding(
+        //           padding: EdgeInsets.all(8),
+        //           child: TextField(
+        //             controller: _eventController,
+        //           ),
+        //         ),
+        //         actions: [
+        //           ElevatedButton(
+        //             onPressed: () {
+        //                 events.addAll({
+        //                   _selectedDay!: [Event(_eventController.text)]
+        //                 });
+        //                 Navigator.of(context).pop();
+        //                 _selectedEvents.value = _getEventsForDay(_selectedDay!);
+        //             },
+        //             child: const Text("Submit"),
+        //           )
+        //         ],
+        //       );
+        // });
       },
       child: const Icon(Icons.add),
     );
