@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:project/login_page.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -15,6 +14,9 @@ class _RegisterPageState extends State<RegisterPage> {
   TextEditingController userIDController = TextEditingController();
   TextEditingController userPWController = TextEditingController();
   TextEditingController userPWConfirmController = TextEditingController();
+
+  bool _isVisible1 = true;
+  bool _isVisible2 = true;
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +35,6 @@ class _RegisterPageState extends State<RegisterPage> {
                   EmailInout(),
                   IDInput(),
                   PasswordInput(),
-                  // RegistButton(),
                 ],
               ),
             ),
@@ -49,9 +50,11 @@ class _RegisterPageState extends State<RegisterPage> {
         key: _formKey,
         child: TextFormField(
           controller: userNameController,
-          onChanged: (value) {},
+          autovalidateMode: AutovalidateMode.onUserInteraction,
           validator: (value) {
-            if (value!.isEmpty) return 'Empty!';
+            if (value!.isEmpty) {
+              return 'Empty!';
+            }
             if (!RegExp(r"^[a-z A-Z ㄱ-ㅎ 가-힣]*$").hasMatch(value)) {
               return ('Incorrect Format!');
             }
@@ -65,13 +68,6 @@ class _RegisterPageState extends State<RegisterPage> {
             helperMaxLines: 3,
           ),
           onSaved: (value) {},
-          onTap: () {
-            if (_formKey.currentState!.validate()) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Save Name')),
-              );
-            }
-          },
         ),
       ),
     );
@@ -85,7 +81,7 @@ class _RegisterPageState extends State<RegisterPage> {
         key: _formKey,
         child: TextFormField(
           controller: userEmailController,
-          onChanged: (value) {},
+          autovalidateMode: AutovalidateMode.onUserInteraction,
           validator: (value) {
             if (value!.isEmpty) return 'Empty!';
             if (!RegExp(
@@ -100,16 +96,9 @@ class _RegisterPageState extends State<RegisterPage> {
             icon: Icon(Icons.mail),
             errorMaxLines: 3,
             labelText: 'Email',
-            helperText: 'Eng, Kor only',
+            helperText: 'Enter Email Format',
           ),
           onSaved: (value) {},
-          onTap: () {
-            if (_formKey.currentState!.validate()) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Save Email')),
-              );
-            }
-          },
         ),
       ),
     );
@@ -125,42 +114,31 @@ class _RegisterPageState extends State<RegisterPage> {
           children: <Widget>[
             Expanded(
                 flex: 3,
-                child: Container(
-                  child: TextFormField(
-                    controller: userIDController,
-                    onChanged: (value) {},
-                    validator: (value) {
-                      obscureText:
-                      true;
-                      if (value!.isEmpty) {
-                        return 'Empty! Please enter at least 3 characters!';
-                      } else if (value.length < 3) {
-                        return ('Must be greater than 3 characters');
-                      } else if (!RegExp(r"^[a-zA-Z0-9]{3,10}$")
-                          .hasMatch(value)) {
-                        return ('Incorrect Format!');
-                      }
-                      return null;
-                    },
-                    decoration: const InputDecoration(
-                      contentPadding: EdgeInsets.all(5),
-                      icon: Icon(Icons.person),
-                      labelText: 'ID',
-                      errorMaxLines: 3,
-                      helperMaxLines: 3,
-                      helperText:
-                          'Please enter at least 3 characters! Eng, number only',
-                    ),
-                    maxLength: 10,
-                    onSaved: (value) {},
-                    onTap: () {
-                      if (_formKey.currentState!.validate()) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('Check duplicate ID!')),
-                        );
-                      }
-                    },
+                child: TextFormField(
+                  controller: userIDController,
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return 'Empty! Please enter at least 3 characters!';
+                    } else if (value.length < 3) {
+                      return ('Must be greater than 3 characters');
+                    } else if (!RegExp(r"^[a-zA-Z0-9]{3,10}$")
+                        .hasMatch(value)) {
+                      return ('Incorrect Format!');
+                    }
+                    return null;
+                  },
+                  decoration: const InputDecoration(
+                    contentPadding: EdgeInsets.all(5),
+                    icon: Icon(Icons.person),
+                    labelText: 'ID',
+                    errorMaxLines: 3,
+                    helperMaxLines: 3,
+                    helperText:
+                        'Please enter at least 3 characters!\nEng, number only',
                   ),
+                  maxLength: 10,
+                  onSaved: (value) {},
                 )),
             Flexible(
               fit: FlexFit.loose,
@@ -174,7 +152,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       builder: (context) {
                         return AlertDialog(
                             title: const Text('Check Duplicate ID'),
-                            content: Padding(
+                            content: const Padding(
                               padding: EdgeInsets.all(8),
                               child: Text('사용하시겠습니까?'),
                             ),
@@ -189,9 +167,9 @@ class _RegisterPageState extends State<RegisterPage> {
                       },
                     );
                   },
-                  child: const Text("confirm"),
                   style: TextButton.styleFrom(
                       backgroundColor: Colors.lightBlue.shade100),
+                  child: const Text("confirm"),
                 ),
               ),
             ),
@@ -203,7 +181,6 @@ class _RegisterPageState extends State<RegisterPage> {
 
   Widget PasswordInput() {
     final _formKey = GlobalKey<FormState>();
-    bool isVisible = true;
 
     return Container(
       padding: const EdgeInsets.all(8),
@@ -212,10 +189,10 @@ class _RegisterPageState extends State<RegisterPage> {
         child: Column(
           children: [
             TextFormField(
-              obscureText: isVisible,
+              obscureText: _isVisible1,
               maxLength: 12,
               controller: userPWController,
-              onChanged: (value) {},
+              autovalidateMode: AutovalidateMode.onUserInteraction,
               validator: (value) {
                 if (value!.isEmpty) {
                   return 'Empty! Please enter at least 6 characters!';
@@ -230,36 +207,28 @@ class _RegisterPageState extends State<RegisterPage> {
               decoration: InputDecoration(
                 suffixIcon: IconButton(
                   onPressed: () {
-                    Future.delayed(const Duration(microseconds: 100));
                     setState(() {
-                      isVisible = !isVisible;
+                      _isVisible1 = !_isVisible1;
                     });
                   },
-                  icon:
-                      Icon(isVisible ? Icons.visibility : Icons.visibility_off),
+                  icon: Icon(
+                    _isVisible1 ? Icons.visibility_off : Icons.visibility,
+                  ),
                 ),
-                contentPadding: EdgeInsets.all(5),
-                icon: Icon(Icons.password),
+                contentPadding: const EdgeInsets.all(5),
+                icon: const Icon(Icons.password),
                 labelText: 'Password',
                 errorMaxLines: 3,
                 helperMaxLines: 3,
                 helperText:
-                    'Please enter at least 6 characters! Eng, number only',
+                    'Please enter at least 6 characters!\nEng, number only',
               ),
-              onSaved: (value) {},
-              onTap: () {
-                if (_formKey.currentState!.validate()) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Save Email')),
-                  );
-                }
-              },
             ),
             TextFormField(
-              obscureText: true,
+              obscureText: _isVisible2,
               maxLength: 12,
               controller: userPWConfirmController,
-              onChanged: (value) {},
+              autovalidateMode: AutovalidateMode.onUserInteraction,
               validator: (value) {
                 if (value!.isEmpty) {
                   return 'Empty! Please enter Password!';
@@ -271,33 +240,24 @@ class _RegisterPageState extends State<RegisterPage> {
                 }
                 return null;
               },
-              decoration: const InputDecoration(
-                contentPadding: EdgeInsets.all(5),
-                icon: Icon(Icons.password),
+              decoration: InputDecoration(
+                suffixIcon: IconButton(
+                  onPressed: () {
+                    setState(() {
+                      _isVisible2 = !_isVisible2;
+                    });
+                  },
+                  icon: Icon(
+                    _isVisible2 ? Icons.visibility_off : Icons.visibility,
+                  ),
+                ),
+                contentPadding: const EdgeInsets.all(5),
+                icon: const Icon(Icons.password),
                 helperMaxLines: 3,
                 errorMaxLines: 3,
                 labelText: 'Password confirm',
                 helperText: 'Please enter Password',
               ),
-              onSaved: (value) {},
-              // onTap: () {
-              //   if (_formKey.currentState!.validate() &&
-              //       userPWController.text
-              //               .compareTo(userPWConfirmController.text) ==
-              //           0) {
-              //     ScaffoldMessenger.of(context).showSnackBar(
-              //       SnackBar(
-              //           content: Text(
-              //               'Save Password${userPWConfirmController.text} and ${userPWController.text}')),
-              //     );
-              //   } else {
-              //     ScaffoldMessenger.of(context).showSnackBar(
-              //       SnackBar(
-              //           content: Text(
-              //               'Unmatched Password${userPWConfirmController.text} and ${userPWController.text}')),
-              //     );
-              //   }
-              // },
             ),
             TextButton(
               onPressed: () {
@@ -307,10 +267,87 @@ class _RegisterPageState extends State<RegisterPage> {
                         0) {
                   Navigator.of(context)
                       .push(MaterialPageRoute(builder: (context) {
+                    //register info save in DB
+
                     return const LoginListPage();
                   }));
+                } else if (userNameController.text.isEmpty) {
+                  showDialog(
+                      context: context,
+                      barrierDismissible: true,
+                      builder: (context) {
+                        return AlertDialog(
+                            content: const Text("name is wrong!"),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                child: const Text("confirm"),
+                              )
+                            ]);
+                      });
+                } else if (userEmailController.text.isEmpty) {
+                  showDialog(
+                      context: context,
+                      builder: (context) {
+                        return AlertDialog(
+                            content: const Text("Email is wrong!"),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                child: const Text("confirm"),
+                              )
+                            ]);
+                      });
+                } else if (userIDController.text.isEmpty) {
+                  showDialog(
+                      context: context,
+                      builder: (context) {
+                        return AlertDialog(
+                            content: const Text("ID is wrong!"),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                child: const Text("confirm"),
+                              )
+                            ]);
+                      });
+                } else if (userPWController.text.isEmpty ||
+                    userPWConfirmController.text.isEmpty) {
+                  showDialog(
+                      context: context,
+                      builder: (context) {
+                        return AlertDialog(
+                            content: const Text("Password is Empty!"),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                child: const Text("confirm"),
+                              )
+                            ]);
+                      });
                 } else {
-                  Text('unmatch');
+                  showDialog(
+                      context: context,
+                      builder: (context) {
+                        return AlertDialog(
+                            content: const Text("Password is unmatch."),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                child: const Text("confirm"),
+                              )
+                            ]);
+                      });
                 }
               },
               child: const Text('Register'),
